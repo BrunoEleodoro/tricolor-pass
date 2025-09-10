@@ -1,12 +1,30 @@
 import { ethers } from 'ethers';
 
-// Contract addresses - ready for Chiliz Chain deployment (ChainID: 88888)
+// Contract addresses - Latest deployment with PUBLIC MockSPFC faucet on Chiliz Spicy Testnet (ChainID: 88882)
 export const CONTRACT_ADDRESSES = {
-  TRICOLOR_PASS: process.env.NEXT_PUBLIC_TRICOLOR_PASS_ADDRESS || '0xdf357d33CE5008782bfC623F6c275FA97725e209',
-  QUEST_MANAGER: process.env.NEXT_PUBLIC_QUEST_MANAGER_ADDRESS || '0x4E4B28D1B6a50DBf9510f8238FAf64cCF9737D25',
-  REWARD_DISTRIBUTOR: process.env.NEXT_PUBLIC_REWARD_DISTRIBUTOR_ADDRESS || '0xAEE9b44Fa94595b0488E97beC272f6f6Ce4daEA4',
-  SPFC_TOKEN: process.env.NEXT_PUBLIC_SPFC_TOKEN_ADDRESS || '0x540165b9dFdDE31658F9BA0Ca5504EdA448BFfd0',
+  TRICOLOR_PASS: process.env.NEXT_PUBLIC_TRICOLOR_PASS_ADDRESS || '0xd144A20cf09Fb688Fa1eF15A1657Da195Cbc6002',
+  QUEST_MANAGER: process.env.NEXT_PUBLIC_QUEST_MANAGER_ADDRESS || '0xF29fDFd2Baa3ACAe768aDEE53a0973D3263782b5',
+  REWARD_DISTRIBUTOR: process.env.NEXT_PUBLIC_REWARD_DISTRIBUTOR_ADDRESS || '0x83ecBb94544aC2b381F5a8744A5437b0fEeD6CDa',
+  MOCK_SPFC_TOKEN: process.env.NEXT_PUBLIC_MOCK_SPFC_TOKEN_ADDRESS || '0x7d6a7894aa4268ec59eC46c41E27c392Ef609A29',
+  SPFC_TOKEN: process.env.NEXT_PUBLIC_SPFC_TOKEN_ADDRESS || '0x7d6a7894aa4268ec59eC46c41E27c392Ef609A29', // Use working MockSPFC for demo
 };
+
+// MockSPFC Token ABI
+export const MOCK_SPFC_ABI = [
+  "function faucet() external",
+  "function balanceOf(address account) external view returns (uint256)",
+  "function canClaimFaucet(address user) external view returns (bool)",
+  "function timeUntilNextClaim(address user) external view returns (uint256)",
+  "function transfer(address to, uint256 amount) external returns (bool)",
+  "function approve(address spender, uint256 amount) external returns (bool)",
+  "function allowance(address owner, address spender) external view returns (uint256)",
+  "function totalSupply() external view returns (uint256)",
+  "function decimals() external view returns (uint8)",
+  "function symbol() external view returns (string)",
+  "function name() external view returns (string)",
+  "event FaucetClaim(address indexed user, uint256 amount)",
+  "event Transfer(address indexed from, address indexed to, uint256 value)"
+];
 
 // ABI definitions (simplified for demo)
 export const TRICOLOR_PASS_ABI = [

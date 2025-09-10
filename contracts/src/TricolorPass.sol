@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /**
  * @title TricolorPass
@@ -14,6 +15,9 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 contract TricolorPass is ERC721, ERC721Enumerable, Pausable, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+    
+    // SPFC Token contract
+    IERC20 public immutable spfcToken;
 
     uint256 private _tokenIdCounter;
 
@@ -44,20 +48,33 @@ contract TricolorPass is ERC721, ERC721Enumerable, Pausable, AccessControl {
     event XPAwarded(address indexed user, uint256 indexed tokenId, uint256 xpAmount);
     event PassUpgraded(address indexed user, uint256 indexed tokenId, PassTier newTier);
 
-    constructor() ERC721("Tricolor Pass", "TCPASS") {
+    constructor(address _spfcToken) ERC721("Tricolor Pass", "TCPASS") {
+        spfcToken = IERC20(_spfcToken);
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(ADMIN_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
     }
+
+    // SPFC token requirements for each tier
+    uint256 public constant BRONZE_REQUIREMENT = 100 * 10**18;  // 100 SPFC
+    uint256 public constant SILVER_REQUIREMENT = 1000 * 10**18; // 1,000 SPFC  
+    uint256 public constant GOLD_REQUIREMENT = 5000 * 10**18;   // 5,000 SPFC
 
     /**
      * @dev Mint a new Tricolor Pass
      * @param to Address to mint the pass to
      * @param tier Initial tier of the pass
      */
-    function mintPass(address to, PassTier tier) external onlyRole(MINTER_ROLE) whenNotPaused {
+    function mintPass(address to, PassTier tier) external whenNotPaused {
         require(!hasPass[to], "User already has a pass");
         require(tier <= PassTier.GOLD, "Invalid tier");
+        
+        // Check SPFC token requirements
+        uint256 requiredTokens = getRequiredTokens(tier);
+        require(
+            spfcToken.balanceOf(to) >= requiredTokens,
+            "Insufficient SPFC tokens for selected tier"
+        );
 
         uint256 tokenId = _tokenIdCounter;
         _tokenIdCounter++;
@@ -75,6 +92,16 @@ contract TricolorPass is ERC721, ERC721Enumerable, Pausable, AccessControl {
         hasPass[to] = true;
 
         emit PassMinted(to, tokenId, tier);
+    }
+    
+    /**
+     * @dev Get required SPFC tokens for a tier
+     */
+    function getRequiredTokens(PassTier tier) public pure returns (uint256) {
+        if (tier == PassTier.BRONZE) return BRONZE_REQUIREMENT;
+        if (tier == PassTier.SILVER) return SILVER_REQUIREMENT;
+        if (tier == PassTier.GOLD) return GOLD_REQUIREMENT;
+        revert("Invalid tier");
     }
 
     /**

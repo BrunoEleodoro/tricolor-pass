@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { usePrivy } from "@privy-io/react-auth";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 import Head from "next/head";
 import { motion } from "framer-motion";
 import { 
@@ -11,7 +11,8 @@ import {
   PuzzlePieceIcon,
   TrophyIcon,
   ClockIcon,
-  ArrowRightIcon
+  ArrowRightIcon,
+  WalletIcon
 } from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
 
@@ -151,7 +152,32 @@ export default function HomePage() {
               <div className="flex items-center space-x-4">
                 <div className="text-right">
                   <p className="text-sm text-gray-400">Bem-vindo</p>
-                  <p className="font-medium">{user?.wallet?.address?.slice(0, 6)}...{user?.wallet?.address?.slice(-4)}</p>
+                  <div className="flex items-center space-x-2">
+                    <p className="font-medium">{user?.wallet?.address?.slice(0, 6)}...{user?.wallet?.address?.slice(-4)}</p>
+                    {user?.wallet?.address && (
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(user.wallet.address);
+                          toast.success('Endereço copiado!');
+                        }}
+                        className="text-xs text-gray-400 hover:text-white transition-colors"
+                        title="Copiar endereço completo"
+                      >
+                        📋
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    Spicy Testnet •{' '}
+                    <a 
+                      href="https://testnet.chiliscan.com/faucet" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-spfc-red hover:underline"
+                    >
+                      CHZ Faucet
+                    </a>
+                  </p>
                 </div>
                 <button
                   onClick={logout}

@@ -5,10 +5,12 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
-import { CheckCircleIcon, StarIcon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon, StarIcon, SparklesIcon } from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
 import { ethers } from "ethers";
 import { CONTRACT_ADDRESSES, TRICOLOR_PASS_ABI, MOCK_SPFC_ABI } from "../lib/contracts";
+import { SPFCLogo, SPTricolorStripes } from "../components/SPFCLogo";
+import { AnimatedBackground } from "../components/AnimatedBackground";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const cookieAuthToken = req.cookies["privy-token"];
@@ -271,10 +273,12 @@ export default function WelcomePage() {
         <meta name="description" content="Viva o SPFC todos os dias. Ganhe XP e desbloqueie benefícios de verdade." />
       </Head>
 
-      <main className="min-h-screen bg-spfc-dark text-white">
+      <main className="min-h-screen bg-gradient-to-br from-spfc-light via-spfc-gray-50 to-spfc-gray-100 text-spfc-gray-900 relative">
+        <AnimatedBackground variant="geometric" className="opacity-30" />
         {/* Hero Section */}
         <div className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-spfc-red/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-br from-sp-red-50 via-transparent to-sp-red-50" />
+          <AnimatedBackground variant="particles" className="opacity-20" />
           
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="text-center mb-12">
@@ -282,11 +286,18 @@ export default function WelcomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
+                className="flex flex-col items-center"
               >
-                <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                  <span className="text-spfc-red">Tricolor</span> Pass
-                </h1>
-                <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                <div className="flex items-center space-x-6 mb-8">
+                  <SPFCLogo size="xl" animated />
+                  <div className="text-left">
+                    <h1 className="text-4xl md:text-6xl font-bold mb-2">
+                      <span className="text-sp-red-600">Tricolor</span> Pass
+                    </h1>
+                    <SPTricolorStripes className="rounded-lg shadow-lg" />
+                  </div>
+                </div>
+                <p className="text-xl md:text-2xl text-spfc-gray-600 mb-8 max-w-3xl mx-auto text-center">
                   Viva o SPFC todos os dias. Ganhe XP e desbloqueie benefícios de verdade.
                 </p>
               </motion.div>
@@ -300,9 +311,10 @@ export default function WelcomePage() {
                 >
                   <button
                     onClick={login}
-                    className="bg-spfc-red hover:bg-red-700 text-white font-semibold py-4 px-8 rounded-lg transition-colors duration-200 text-lg"
+                    className="bg-gradient-to-r from-sp-red-600 to-sp-red-700 hover:from-sp-red-700 hover:to-sp-red-800 text-white font-semibold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg transform hover:scale-105 flex items-center space-x-2"
                   >
-                    Conectar Carteira
+                    <SparklesIcon className="h-5 w-5" />
+                    <span>Conectar Carteira</span>
                   </button>
                 </motion.div>
               ) : (
@@ -313,10 +325,10 @@ export default function WelcomePage() {
                   className="space-y-6"
                 >
                   {/* Wallet Address Display */}
-                  <div className="bg-spfc-gray-100 rounded-lg p-6 max-w-md mx-auto">
-                    <p className="text-sm text-gray-400 mb-2">Sua carteira testnet:</p>
+                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 max-w-md mx-auto shadow-lg border border-spfc-gray-200">
+                    <p className="text-sm text-spfc-gray-600 mb-2">Sua carteira testnet:</p>
                     <div className="flex items-center justify-center space-x-2">
-                      <code className="text-sm font-mono text-spfc-red">
+                      <code className="text-sm font-mono text-sp-red-600 bg-sp-red-50 px-2 py-1 rounded-lg">
                         {walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : 'Carregando...'}
                       </code>
                       {walletAddress && (
@@ -325,42 +337,44 @@ export default function WelcomePage() {
                             navigator.clipboard.writeText(walletAddress);
                             toast.success('Endereço copiado!');
                           }}
-                          className="text-xs text-gray-400 hover:text-white transition-colors"
+                          className="text-xs text-spfc-gray-500 hover:text-sp-red-600 transition-colors"
                           title="Copiar endereço"
                         >
                           📋
                         </button>
                       )}
                     </div>
-                    <p className="text-xs text-gray-500 mt-2">
+                    <p className="text-xs text-spfc-gray-500 mt-2">
                       Chiliz Spicy Testnet • Precisa de CHZ?{' '}
                       <a 
                         href="https://testnet.chiliscan.com/faucet" 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="text-spfc-red hover:underline"
+                        className="text-sp-red-600 hover:text-sp-red-700 hover:underline font-medium"
                       >
                         Faucet aqui
                       </a>
                     </p>
                   </div>
                   {/* Debug Info */}
-                  <div className="bg-yellow-100 text-black p-4 rounded mb-4">
-                    <p>Debug Info:</p>
-                    <p>Authenticated: {authenticated ? 'Yes' : 'No'}</p>
-                    <p>User wallet: {user?.wallet?.address ? 'Yes' : 'No'}</p>
-                    <p>Wallet address: {walletAddress || 'None'}</p>
-                    <p>Active wallet: {activeWallet ? 'Yes' : 'No'}</p>
-                    <p>SPFC Balance: {spfcBalance}</p>
-                    <p>Can claim faucet: {canClaimFaucet ? 'Yes' : 'No'}</p>
+                  <div className="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-2xl mb-4 shadow-sm">
+                    <p className="font-semibold mb-2">Debug Info:</p>
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <p>Authenticated: <span className="font-medium">{authenticated ? 'Yes' : 'No'}</span></p>
+                      <p>User wallet: <span className="font-medium">{user?.wallet?.address ? 'Yes' : 'No'}</span></p>
+                      <p>Wallet address: <span className="font-medium">{walletAddress || 'None'}</span></p>
+                      <p>Active wallet: <span className="font-medium">{activeWallet ? 'Yes' : 'No'}</span></p>
+                      <p>SPFC Balance: <span className="font-medium">{spfcBalance}</span></p>
+                      <p>Can claim faucet: <span className="font-medium">{canClaimFaucet ? 'Yes' : 'No'}</span></p>
+                    </div>
                   </div>
 
                   {/* $SPFC Token Status */}
-                  <div className="bg-spfc-gray-100 rounded-lg p-6 max-w-md mx-auto">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 max-w-md mx-auto shadow-lg border border-spfc-gray-200">
                     <div className="text-center">
                       <div className="flex items-center justify-center space-x-3 mb-3">
-                        <CheckCircleIcon className="h-6 w-6 text-green-500" />
-                        <span className="text-green-400 font-medium">
+                        <CheckCircleIcon className="h-6 w-6 text-green-600" />
+                        <span className="text-green-600 font-medium">
                           {spfcBalance.toLocaleString()} $SPFC tokens
                         </span>
                       </div>
@@ -369,7 +383,7 @@ export default function WelcomePage() {
                       <button
                         onClick={handleClaimSPFCFaucet}
                         disabled={isClaimingFaucet}
-                        className="bg-spfc-red hover:bg-red-700 disabled:opacity-50 text-white text-sm font-medium py-2 px-4 rounded transition-colors mb-4"
+                        className="bg-gradient-to-r from-sp-red-600 to-sp-red-700 hover:from-sp-red-700 hover:to-sp-red-800 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium py-3 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 mb-4 transform hover:scale-105"
                       >
                         {isClaimingFaucet ? 'Reivindicando...' : 'Reivindicar 10,000 $SPFC'}
                       </button>
@@ -377,8 +391,8 @@ export default function WelcomePage() {
                   </div>
 
                   {/* Tier Selection - ALWAYS SHOW */}
-                  <div className="bg-blue-100 text-black p-2 rounded mb-2">
-                    <p>This section should always show when logged in</p>
+                  <div className="bg-blue-50 border border-blue-200 text-blue-800 p-3 rounded-xl mb-4 shadow-sm">
+                    <p className="text-sm font-medium text-center">Seção de seleção sempre visível quando logado</p>
                   </div>
                   
                   <motion.div
@@ -386,7 +400,7 @@ export default function WelcomePage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6, duration: 0.4 }}
                   >
-                    <h2 className="text-2xl font-semibold mb-6">Escolha seu nível</h2>
+                    <h2 className="text-2xl font-semibold mb-6 text-center text-spfc-gray-800">Escolha seu nível</h2>
                     
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto mb-8">
                       {tiers.map((tier) => (
@@ -395,30 +409,32 @@ export default function WelcomePage() {
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => setSelectedTier(tier.id as any)}
-                          className={`relative cursor-pointer p-6 rounded-lg border-2 transition-all duration-200 ${
+                          className={`relative cursor-pointer p-6 rounded-2xl border-2 transition-all duration-300 shadow-lg hover:shadow-xl ${
                             selectedTier === tier.id
-                              ? 'border-spfc-red bg-spfc-gray-100'
-                              : 'border-spfc-gray-200 bg-spfc-gray-100/50 hover:border-spfc-gray-300'
+                              ? 'border-sp-red-500 bg-sp-red-50 transform scale-105'
+                              : 'border-spfc-gray-300 bg-white/80 backdrop-blur-sm hover:border-sp-red-300 hover:bg-sp-red-25'
                           }`}
                         >
                           <div className="text-center">
-                            <StarIcon className={`h-8 w-8 mx-auto mb-3 text-${tier.color}`} />
-                            <h3 className="text-lg font-semibold mb-2">{tier.name}</h3>
-                            <p className="text-sm text-gray-400 mb-4">{tier.description}</p>
+                            <div className={`w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-${tier.color} to-${tier.color}/80 flex items-center justify-center shadow-md`}>
+                              <StarIcon className="h-6 w-6 text-white" />
+                            </div>
+                            <h3 className="text-lg font-semibold mb-2 text-spfc-gray-800">{tier.name}</h3>
+                            <p className="text-sm text-spfc-gray-600 mb-4">{tier.description}</p>
                             
                             <div className="space-y-1 mb-4">
                               {tier.benefits.map((benefit, index) => (
-                                <p key={index} className="text-xs text-gray-300">• {benefit}</p>
+                                <p key={index} className="text-xs text-spfc-gray-600">• {benefit}</p>
                               ))}
                             </div>
                             
-                            <p className="text-xs text-spfc-red font-medium">{tier.requirement}</p>
+                            <p className="text-xs text-sp-red-600 font-medium bg-sp-red-50 px-2 py-1 rounded-lg">{tier.requirement}</p>
                           </div>
                           
                           {selectedTier === tier.id && (
                             <motion.div
                               layoutId="selectedTier"
-                              className="absolute inset-0 border-2 border-spfc-red rounded-lg"
+                              className="absolute inset-0 border-2 border-sp-red-500 rounded-2xl shadow-lg"
                             />
                           )}
                         </motion.div>
@@ -428,7 +444,7 @@ export default function WelcomePage() {
                     <button
                       onClick={handleMintPass}
                       disabled={isMinting}
-                      className="bg-spfc-red hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-4 px-8 rounded-lg transition-colors duration-200 text-lg"
+                      className="bg-gradient-to-r from-sp-red-600 to-sp-red-700 hover:from-sp-red-700 hover:to-sp-red-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg transform hover:scale-105"
                     >
                       {isMinting ? (
                         <div className="flex items-center space-x-2">
@@ -453,11 +469,11 @@ export default function WelcomePage() {
                 >
                   <button
                     onClick={() => router.push('/home')}
-                    className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                    className="px-8 py-3 bg-gradient-to-r from-spfc-gray-600 to-spfc-gray-700 text-white rounded-2xl font-semibold hover:from-spfc-gray-700 hover:to-spfc-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 border border-spfc-gray-500"
                   >
                     Explorar Dashboard →
                   </button>
-                  <p className="text-sm text-gray-400 mt-2">
+                  <p className="text-sm text-spfc-gray-600 mt-2">
                     Acesse quests, recompensas e sua coleção
                   </p>
                 </motion.div>
@@ -467,11 +483,14 @@ export default function WelcomePage() {
         </div>
 
         {/* Features Preview */}
-        <section className="py-16 bg-spfc-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-16 bg-gradient-to-b from-white to-spfc-gray-50 relative">
+          <div className="absolute inset-0">
+            <AnimatedBackground variant="football" className="opacity-10" />
+          </div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">O que você pode fazer</h2>
-              <p className="text-gray-400 text-lg">Experiências exclusivas para torcedores</p>
+              <h2 className="text-3xl font-bold mb-4 text-spfc-gray-800">O que você pode fazer</h2>
+              <p className="text-spfc-gray-600 text-lg">Experiências exclusivas para torcedores</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -479,39 +498,39 @@ export default function WelcomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
-                className="text-center p-6"
+                className="text-center p-6 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-spfc-gray-200 hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                <div className="bg-spfc-red/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="bg-gradient-to-br from-sp-red-500 to-sp-red-600 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg animate-float">
                   <span className="text-2xl">🎯</span>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Complete Missões</h3>
-                <p className="text-gray-400">Escaneie QR codes no estádio, responda quizzes e faça palpites</p>
+                <h3 className="text-xl font-semibold mb-2 text-spfc-gray-800">Complete Missões</h3>
+                <p className="text-spfc-gray-600">Escaneie QR codes no estádio, responda quizzes e faça palpites</p>
               </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.4 }}
-                className="text-center p-6"
+                className="text-center p-6 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-spfc-gray-200 hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                <div className="bg-spfc-red/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg animate-float" style={{ animationDelay: '0.5s' }}>
                   <span className="text-2xl">⭐</span>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Ganhe XP</h3>
-                <p className="text-gray-400">Acumule experiência e evolua seu nível de torcedor</p>
+                <h3 className="text-xl font-semibold mb-2 text-spfc-gray-800">Ganhe XP</h3>
+                <p className="text-spfc-gray-600">Acumule experiência e evolua seu nível de torcedor</p>
               </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.4 }}
-                className="text-center p-6"
+                className="text-center p-6 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-spfc-gray-200 hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                <div className="bg-spfc-red/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="bg-gradient-to-br from-green-500 to-green-600 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg animate-float" style={{ animationDelay: '1s' }}>
                   <span className="text-2xl">🎁</span>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Resgate Prêmios</h3>
-                <p className="text-gray-400">Descontos, produtos exclusivos e experiências VIP</p>
+                <h3 className="text-xl font-semibold mb-2 text-spfc-gray-800">Resgate Prêmios</h3>
+                <p className="text-spfc-gray-600">Descontos, produtos exclusivos e experiências VIP</p>
               </motion.div>
             </div>
           </div>

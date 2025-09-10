@@ -1,8 +1,17 @@
-# Tricolor Pass - São Paulo FC Fan Experience Platform
+# 🔴⚫⚪ Tricolor Pass - São Paulo FC Fan Experience Platform
 
-**Plataforma Web3 que conecta torcedores do SPFC através de missões, XP e recompensas exclusivas.**
+> **Plataforma Web3 que conecta torcedores do SPFC através de missões, XP e recompensas exclusivas.**
 
 🏆 **Construído para Hackathon Chiliz** - Utilizando smart contracts na Chiliz Chain para NFTs, XP e recompensas.
+
+---
+
+## 📚 Documentação
+
+- **🇧🇷 [README em Português](README-PT.md)** - Documentação completa em português
+- **🇺🇸 [English README](README-EN.md)** - Complete documentation in English
+
+---
 
 ## 🎯 Visão Geral
 

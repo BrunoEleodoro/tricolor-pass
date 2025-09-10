@@ -57,14 +57,34 @@ function MyApp({ Component, pageProps }: AppProps) {
           position="top-center"
           toastOptions={{
             style: {
-              background: '#1A1D23',
-              color: '#fff',
-              border: '1px solid #C10016',
+              background: 'rgba(255, 255, 255, 0.95)',
+              color: '#374151',
+              border: '1px solid #E5E7EB',
+              borderRadius: '12px',
+              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+              backdropFilter: 'blur(8px)',
             },
             success: {
+              style: {
+                border: '1px solid #C10016',
+              },
               iconTheme: {
                 primary: '#C10016',
                 secondary: '#fff',
+              },
+            },
+            error: {
+              style: {
+                border: '1px solid #EF4444',
+              },
+              iconTheme: {
+                primary: '#EF4444',
+                secondary: '#fff',
+              },
+            },
+            loading: {
+              style: {
+                border: '1px solid #6B7280',
               },
             },
           }}

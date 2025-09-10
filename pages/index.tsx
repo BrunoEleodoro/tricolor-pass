@@ -311,7 +311,7 @@ export default function WelcomePage() {
                 >
                   <button
                     onClick={login}
-                    className="bg-gradient-to-r from-sp-red-600 to-sp-red-700 hover:from-sp-red-700 hover:to-sp-red-800 text-white font-semibold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg transform hover:scale-105 flex items-center space-x-2"
+                    className="bg-gradient-to-r from-sp-red-600 to-sp-red-700 hover:from-sp-red-700 hover:to-sp-red-800 text-white font-semibold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg transform hover:scale-105 flex items-center space-x-2 w-full justify-center"
                   >
                     <SparklesIcon className="h-5 w-5" />
                     <span>Conectar Carteira</span>

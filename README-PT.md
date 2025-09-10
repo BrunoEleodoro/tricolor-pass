@@ -125,13 +125,14 @@ forge script script/Deploy.s.sol --rpc-url $RPC_URL --broadcast
 
 ## 🔗 Contratos Deployed
 
-### Chiliz Spicy Testnet
-```
-TricolorPass: 0x... (a ser atualizado)
-QuestManager: 0x... (a ser atualizado) 
-RewardDistributor: 0x... (a ser atualizado)
-MockSPFC: 0x... (a ser atualizado)
-```
+### **Chiliz Spicy Testnet (ChainID: 88882)**
+
+- **MockSPFC Token** (Faucet): [`0x3c05A2De1449F2C113499A97fa7BeDF64165C5b0`](https://spicy-explorer.chiliz.com/address/0x3c05A2De1449F2C113499A97fa7BeDF64165C5b0)
+- **TricolorPass NFT**: [`0x218e55aeF350110f7b95ec1EB2e9ef3175CbDEF4`](https://spicy-explorer.chiliz.com/address/0x218e55aeF350110f7b95ec1EB2e9ef3175CbDEF4)
+- **QuestManager**: [`0xFBdb303D86C9d0FB19D651C5374BCAFfBF168eC8`](https://spicy-explorer.chiliz.com/address/0xFBdb303D86C9d0FB19D651C5374BCAFfBF168eC8)
+- **RewardDistributor**: [`0x841F0DAe8493844b227b7eCB2Fb6ea77a4A2d6e9`](https://spicy-explorer.chiliz.com/address/0x841F0DAe8493844b227b7eCB2Fb6ea77a4A2d6e9)
+
+> 🌐 **Explorer:** [Chiliz Spicy Explorer](https://spicy-explorer.chiliz.com/)
 
 ## 🤝 Contribuindo
 
